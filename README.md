@@ -1,2 +1,32 @@
-# clinical-triage-agent
-An AI-powered clinical triage agent built to assess patient symptom severity, prioritize urgent care, and assist healthcare providers with intelligent decision-making and automated routing.
+# Clinical Triage Agent
+
+## Problem Statement
+Emergency and outpatient triage requires synthesizing multiple data types —
+patient-reported symptoms, visual evidence (e.g. X-rays), and clinical notes —
+usually reviewed sequentially by a human. This project is a full-stack AI
+assistant that ingests text and image inputs, reasons about urgency through
+an agentic pipeline grounded in retrieved medical guidelines, and proposes a
+triage action that a clinician must approve. The system never acts
+autonomously on patient care — every action requires human sign-off.
+
+## Tech Stack
+| Layer | Tool |
+|---|---|
+| Frontend | React (Vite) + Tailwind CSS |
+| Backend | FastAPI (Python) |
+| Database | PostgreSQL + SQLAlchemy |
+| Vector DB (RAG) | ChromaDB |
+| Agent orchestration | LangGraph |
+| LLM | Google Gemini API (multimodal — text + image) |
+| Deployment | Vercel (frontend), Render (backend + DB) |
+
+## Known Limitations
+- Uses Gemini's free tier for development, which has daily rate limits —
+  fine for demo/learning purposes, not production-scale.
+- This is a learning/portfolio project demonstrating agentic architecture
+  and human-in-the-loop safety design — not a clinical-grade diagnostic tool.
+
+## 🚧 Build Log
+| Day | Date | What was done |
+|-----|------|----------------|
+| 1 | 2026-08-18 | Project architecture defined, repo structure created (backend/frontend split), Python venv + backend dependencies installed, React (Vite) frontend scaffolded, Gemini API integrated, .gitignore + .env configured for secret safety |
