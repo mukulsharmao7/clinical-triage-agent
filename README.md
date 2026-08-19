@@ -19,6 +19,7 @@ autonomously on patient care — every action requires human sign-off.
 | Agent orchestration | LangGraph |
 | LLM | Google Gemini API (multimodal — text + image) |
 | Deployment | Vercel (frontend), Render (backend + DB) |
+| Database | PostgreSQL (via Docker) + SQLAlchemy ORM |
 
 ## Known Limitations
 - Uses Gemini's free tier for development, which has daily rate limits —
@@ -30,3 +31,6 @@ autonomously on patient care — every action requires human sign-off.
 | Day | Date | What was done |
 |-----|------|----------------|
 | 1 | 2026-08-18 | Project architecture defined, repo structure created (backend/frontend split), Python venv + backend dependencies installed, React (Vite) frontend scaffolded, Gemini API integrated, .gitignore + .env configured for secret safety |
+
+
+| 2 | 2026-08-19 | Dockerized PostgreSQL via docker-compose, FastAPI skeleton with health check endpoint, SQLAlchemy database connection setup, first table (patients) created and verified |
