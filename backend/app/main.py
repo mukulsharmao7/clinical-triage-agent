@@ -1,10 +1,9 @@
 from fastapi import FastAPI
-from app.database import engine, Base
-from app import models
-
-Base.metadata.create_all(bind=engine)
+from app.routes import patients
 
 app = FastAPI(title="Clinical Triage Agent API")
+
+app.include_router(patients.router)
 
 @app.get("/")
 def health_check():
