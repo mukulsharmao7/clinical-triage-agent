@@ -38,3 +38,43 @@ class CaseResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# AGENT PROPOSALS  
+
+# ---------- Agent Proposal ----------
+
+class AgentProposalCreate(BaseModel):
+    case_id: int
+    reasoning: str
+    triage_level: str
+    recommended_action: str
+
+class AgentProposalResponse(BaseModel):
+    id: int
+    case_id: int
+    reasoning: str
+    triage_level: str
+    recommended_action: str
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ---------- Clinician Action ----------
+
+class ClinicianActionCreate(BaseModel):
+    proposal_id: int
+    decision: str
+    notes: Optional[str] = None
+
+class ClinicianActionResponse(BaseModel):
+    id: int
+    proposal_id: int
+    decision: str
+    notes: Optional[str]
+    decided_at: datetime
+
+    class Config:
+        from_attributes = True

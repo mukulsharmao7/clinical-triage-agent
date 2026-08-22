@@ -33,4 +33,5 @@ autonomously on patient care — every action requires human sign-off.
 |-----|------|----------------|
 | 1 | 2026-08-18 | Project architecture defined, repo structure created (backend/frontend split), Python venv + backend dependencies installed, React (Vite) frontend scaffolded, Gemini API integrated, .gitignore + .env configured for secret safety |
 | 2 | 2026-08-19 | Dockerized PostgreSQL via docker-compose, FastAPI skeleton with health check endpoint, SQLAlchemy database connection setup, first table (patients) created and verified |
-| 3 | 2026-08-20 | Remaining models added (cases, agent_proposals, clinician_actions) with relationships, Pydantic schemas introduced, Alembic migrations set up and applied (fixed env.py config bugs), first CRUD endpoints built and tested (POST/GET patients) via /docs |
+| 3 | 2026-08-20 | Remaining models added (cases, agent_proposals, clinician_actions) with relationships, Pydantic schemas introduced, Alembic migrations set up and applied, first CRUD endpoints built and tested (POST/GET patients) via /docs |
+| 4 | 2026-08-21 | CRUD endpoints built for cases, agent_proposals, and clinician_actions; query filtering added (cases by patient, proposals by status); business logic enforced (no duplicate proposal resolution); full end-to-end relationship chain tested via /docs |
