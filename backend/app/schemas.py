@@ -78,3 +78,23 @@ class ClinicianActionResponse(BaseModel):
 
     class Config:
         from_attributes = True
+        
+        
+        
+
+class ClinicianCreate(BaseModel):
+    email: str
+    password: str
+    full_name: str
+class ClinicianResponse(BaseModel):
+    id: int
+    email: str
+    full_name: str
+    created_at: datetime
+    class Config:
+        from_attributes = True
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

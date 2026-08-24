@@ -54,3 +54,11 @@ class ClinicianAction(Base):
     decided_at = Column(DateTime(timezone=True), server_default=func.now())
 
     proposal = relationship("AgentProposal", back_populates="clinician_action")
+    
+class Clinician(Base):
+    __tablename__="Clinicians"
+    id = Column(Integer,primary_key=True,index =True)
+    email = Column(String, unique=True, nullable=False, index=True)
+    hashed_password = Column(String, nullable=False)
+    full_name = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
