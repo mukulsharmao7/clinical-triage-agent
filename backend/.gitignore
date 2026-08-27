@@ -5,3 +5,4 @@ __pycache__/
 
 app/uploads/*
 !app/uploads/.gitkeep
+app/chroma_data/
