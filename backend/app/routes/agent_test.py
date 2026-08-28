@@ -11,6 +11,8 @@ from app import models
 from pydantic import BaseModel
 import shutil
 import os
+from app.agent.triage_agent import run_triage_agent
+
 
 router = APIRouter(prefix="/agent-test", tags=["agent-test"])
 
@@ -80,4 +82,26 @@ async def test_full_reasoning(
         "raw_response": raw_response,
         "parsed": parsed,
         "audio_transcript": audio_transcript
+    }
+@router.post("/reason-agent")
+async def test_agent_reasoning(
+    symptoms_text: str = Form(...),
+    image: UploadFile = File(None),
+    audio: UploadFile = File(None),
+    current_clinician: models.Clinician = Depends(get_current_clinician)
+):
+    image_path = save_upload(image) if image else None
+
+    audio_transcript = None
+    if audio:
+        from app.services.gemini_service import transcribe_audio
+        audio_path = save_upload(audio)
+        audio_transcript = transcribe_audio(audio_path)
+
+    result = run_triage_agent(symptoms_text, image_path, audio_transcript)
+
+    return {
+        "retrieved_guidelines": result["retrieved_guidelines"],
+        "raw_reasoning": result["raw_reasoning"],
+        "parsed_result": result["parsed_result"]
     }
