@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from typing import Optional
 from app.database import SessionLocal
 from app import models, schemas
+from app.agent.triage_agent import run_agent_and_save_proposal
+from app.auth import get_current_clinician
 
 router = APIRouter(prefix="/cases", tags=["cases"])
 
@@ -38,3 +40,21 @@ def get_case(case_id: int, db: Session = Depends(get_db)):
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     return case
+
+@router.post("/{case_id}/run-agent")
+def run_agent_for_existing_case(
+    case_id: int,
+    db: Session = Depends(get_db),
+    current_clinician: models.Clinician = Depends(get_current_clinician)
+):
+    case = db.query(models.Case).filter(models.Case.id == case_id).first()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+
+    proposal = run_agent_and_save_proposal(case_id, db)
+    return {
+        "case_id": case_id,
+        "proposal_id": proposal.id,
+        "triage_level": proposal.triage_level,
+        "status": proposal.status
+    }
