@@ -11,7 +11,9 @@ from app import models
 from pydantic import BaseModel
 import shutil
 import os
-from app.agent.triage_agent import run_triage_agent
+from app.agent.triage_agent import run_triage_agent, run_agent_and_save_proposal
+from sqlalchemy.orm import Session
+from app.database import SessionLocal
 
 
 router = APIRouter(prefix="/agent-test", tags=["agent-test"])
@@ -27,6 +29,14 @@ def save_upload(upload_file: UploadFile, upload_dir: str = "app/uploads") -> str
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(upload_file.file, buffer)
     return file_path
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 @router.post("/reason")
@@ -83,6 +93,8 @@ async def test_full_reasoning(
         "parsed": parsed,
         "audio_transcript": audio_transcript
     }
+
+
 @router.post("/reason-agent")
 async def test_agent_reasoning(
     symptoms_text: str = Form(...),
@@ -94,7 +106,6 @@ async def test_agent_reasoning(
 
     audio_transcript = None
     if audio:
-        from app.services.gemini_service import transcribe_audio
         audio_path = save_upload(audio)
         audio_transcript = transcribe_audio(audio_path)
 
@@ -104,4 +115,20 @@ async def test_agent_reasoning(
         "retrieved_guidelines": result["retrieved_guidelines"],
         "raw_reasoning": result["raw_reasoning"],
         "parsed_result": result["parsed_result"]
+    }
+
+
+@router.post("/run-for-case/{case_id}")
+def run_agent_for_case(
+    case_id: int,
+    db: Session = Depends(get_db),
+    current_clinician: models.Clinician = Depends(get_current_clinician)
+):
+    proposal = run_agent_and_save_proposal(case_id, db)
+    return {
+        "proposal_id": proposal.id,
+        "triage_level": proposal.triage_level,
+        "reasoning": proposal.reasoning,
+        "recommended_action": proposal.recommended_action,
+        "status": proposal.status
     }
