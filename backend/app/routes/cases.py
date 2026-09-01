@@ -34,6 +34,17 @@ def list_cases(patient_id: Optional[int] = None, db: Session = Depends(get_db)):
         query = query.filter(models.Case.patient_id == patient_id)
     return query.all()
 
+from app.services.hospital_service import find_nearby_hospitals
+
+@router.get("/nearby-hospitals")
+def get_nearby_hospitals(
+    latitude: str,
+    longitude: str,
+    current_clinician: models.Clinician = Depends(get_current_clinician)
+):
+    hospitals = find_nearby_hospitals(latitude, longitude)
+    return {"hospitals": hospitals}
+
 @router.get("/{case_id}", response_model=schemas.CaseResponse)
 def get_case(case_id: int, db: Session = Depends(get_db)):
     case = db.query(models.Case).filter(models.Case.id == case_id).first()
@@ -51,10 +62,14 @@ def run_agent_for_existing_case(
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
 
-    proposal = run_agent_and_save_proposal(case_id, db)
+    result = run_agent_and_save_proposal(case_id, db)
+    proposal = result["proposal"]
+    emergency = result["emergency"]
+
     return {
         "case_id": case_id,
         "proposal_id": proposal.id,
         "triage_level": proposal.triage_level,
-        "status": proposal.status
+        "status": proposal.status,
+        "emergency": emergency
     }

@@ -124,11 +124,13 @@ def run_agent_for_case(
     db: Session = Depends(get_db),
     current_clinician: models.Clinician = Depends(get_current_clinician)
 ):
-    proposal = run_agent_and_save_proposal(case_id, db)
+    result = run_agent_and_save_proposal(case_id, db)
+    proposal = result["proposal"]
     return {
         "proposal_id": proposal.id,
         "triage_level": proposal.triage_level,
         "reasoning": proposal.reasoning,
         "recommended_action": proposal.recommended_action,
-        "status": proposal.status
+        "status": proposal.status,
+        "emergency": result["emergency"]
     }
