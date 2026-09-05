@@ -216,3 +216,13 @@ class DietPlanResponse(BaseModel):
 
     class Config:
         from_attributes = True
+        
+class PatientDocumentResponse(BaseModel):
+    id: int
+    patient_id: int
+    file_path: str
+    document_type: Optional[str]
+    uploaded_at: datetime
+
+    class Config:
+        from_attributes = True
