@@ -24,3 +24,38 @@ TRIAGE_GUIDELINES = [
         "text": "Mild cough or nasal congestion without fever is low urgency. Difficulty breathing, wheezing, blue-tinged lips, or oxygen saturation concerns are emergencies requiring immediate care."
     }
 ]
+
+SPECIALTY_MAP = {
+    "chest_pain": "cardiologist",
+    "fever": "general physician",
+    "skin_lesion": "dermatologist",
+    "headache": "neurologist",
+    "abdominal_pain": "general surgeon",
+    "respiratory": "pulmonologist",
+    "back_pain": "orthopedic",
+    "eye_injury": "ophthalmologist",
+    "allergic_reaction": "allergist",
+    "burns": "general surgeon",
+    "fracture_suspected": "orthopedic",
+    "pediatric_fever": "pediatrician",
+    "pregnancy_bleeding": "gynecologist",
+    "mental_health_crisis": "psychiatrist",
+    "dehydration": "general physician",
+    "urinary_symptoms": "urologist",
+}
+
+SPECIALTY_SEARCH_KEYWORDS = {
+    "cardiologist": "cardiac|heart",
+    "dermatologist": "skin|derma",
+    "neurologist": "neuro",
+    "general surgeon": "surgical|surgery",
+    "pulmonologist": "chest|pulmo|respiratory|lung",
+    "orthopedic": "ortho|bone|joint",
+    "ophthalmologist": "eye",
+    "allergist": "allergy",
+    "pediatrician": "child|paediatric|pediatric",
+    "gynecologist": "gynae|gynec|women|maternity",
+    "psychiatrist": "mental|psychiatr",
+    "urologist": "urolog|kidney",
+    "general physician": "clinic|general|physician",
+}

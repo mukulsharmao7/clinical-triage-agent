@@ -10,6 +10,8 @@ from app import models
 from PIL import Image
 from app.services.hospital_service import find_nearby_hospitals
 
+from app.services.hospital_service import find_nearby_hospitals, find_nearby_care
+from app.data.triage_guidelines import SPECIALTY_MAP
 
 RED_FLAG_WEIGHTS = {
     "chest pain": 3, "difficulty breathing": 3, "can't breathe": 3, "unconscious": 3,
@@ -296,22 +298,31 @@ def run_agent_and_save_proposal(case_id: int, db: Session) -> dict:
         triage_level=final.get("triage_level", "unknown"),
         red_flag_level=final.get("red_flag_level", "none")
     )
-    nearby_hospitals = []
-    if emergency_info["emergency_triggered"] and case.latitude and case.longitude:
-        nearby_hospitals = find_nearby_hospitals(case.latitude, case.longitude)
-        emergency_info["nearby_hospitals"] = nearby_hospitals
+
+    specialty = SPECIALTY_MAP.get(final.get("primary_guideline_id"), "general physician")
+    nearby_care = {"results": [], "specialty_match_found": False}
+
+    if case.latitude and case.longitude:
+        if emergency_info["emergency_triggered"]:
+            hospitals = find_nearby_hospitals(case.latitude, case.longitude)
+            emergency_info["nearby_hospitals"] = hospitals
+        else:
+            nearby_care = find_nearby_care(case.latitude, case.longitude, specialty=specialty)
 
     if emergency_info["emergency_triggered"]:
         dispatch = models.EmergencyDispatch(
             case_id=case.id,
             triggered_reason=f"triage_level={final.get('triage_level')}, red_flag_level={final.get('red_flag_level')}",
             ambulance_number_shown=emergency_info["ambulance_number"],
-            nearest_hospitals_json=json.dumps(nearby_hospitals)
+            nearest_hospitals_json=json.dumps(emergency_info.get("nearby_hospitals", []))
         )
         db.add(dispatch)
         db.commit()
 
     return {
         "proposal": new_proposal,
-        "emergency": emergency_info
+        "emergency": emergency_info,
+        "specialty": specialty,
+        "nearby_care": nearby_care,
+        "reasoning": final.get("reasoning", "")
     }

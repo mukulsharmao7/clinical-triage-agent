@@ -77,3 +77,70 @@ def find_nearby_hospitals(latitude: str, longitude: str, radius_meters: int = 50
 
     hospitals.sort(key=lambda h: h["distance_km"])
     return hospitals[:limit]
+
+from app.data.triage_guidelines import SPECIALTY_SEARCH_KEYWORDS
+
+
+def find_nearby_care(latitude, longitude, specialty=None, radius_meters=8000, limit=5):
+    try:
+        lat, lon = float(latitude), float(longitude)
+    except (TypeError, ValueError):
+        return {"results": [], "specialty_match_found": False}
+
+    keyword = SPECIALTY_SEARCH_KEYWORDS.get(specialty, "")
+
+    if keyword:
+        query = f"""
+        [out:json][timeout:20];
+        (
+          node["amenity"~"hospital|clinic|doctors"]["name"~"{keyword}",i](around:{radius_meters},{lat},{lon});
+          way["amenity"~"hospital|clinic|doctors"]["name"~"{keyword}",i](around:{radius_meters},{lat},{lon});
+        );
+        out center;
+        """
+        results = _run_overpass(query, lat, lon, limit)
+        if results:
+            return {"results": results, "specialty_match_found": True}
+
+    fallback = find_nearby_hospitals(latitude, longitude, radius_meters=5000, limit=limit)
+    return {"results": fallback, "specialty_match_found": False}
+
+
+def _run_overpass(query, lat, lon, limit):
+    overpass_urls = [
+        "https://overpass-api.de/api/interpreter",
+        "https://overpass.kumi.systems/api/interpreter"
+    ]
+    headers = {"User-Agent": "ClinicalTriageAgent/1.0 (student project; contact: doctor2@test.com)"}
+    data = None
+    for url in overpass_urls:
+        try:
+            r = requests.post(url, data={"data": query}, headers=headers, timeout=25)
+            r.raise_for_status()
+            data = r.json()
+            break
+        except (requests.RequestException, ValueError):
+            continue
+    if data is None:
+        return []
+
+    results = []
+    for el in data.get("elements", []):
+        tags = el.get("tags", {})
+        name = tags.get("name")
+        if not name:
+            continue
+        h_lat = el.get("lat") or el.get("center", {}).get("lat")
+        h_lon = el.get("lon") or el.get("center", {}).get("lon")
+        if h_lat is None or h_lon is None:
+            continue
+        results.append({
+            "name": name,
+            "latitude": h_lat, "longitude": h_lon,
+            "distance_km": calculate_distance_km(lat, lon, h_lat, h_lon),
+            "phone": tags.get("phone") or tags.get("contact:phone"),
+            "address": tags.get("addr:full") or tags.get("addr:street", ""),
+            "directions_url": f"https://www.google.com/maps/dir/?api=1&destination={h_lat},{h_lon}"
+        })
+    results.sort(key=lambda h: h["distance_km"])
+    return results[:limit]

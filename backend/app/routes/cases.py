@@ -64,12 +64,14 @@ def run_agent_for_existing_case(
 
     result = run_agent_and_save_proposal(case_id, db)
     proposal = result["proposal"]
-    emergency = result["emergency"]
 
     return {
         "case_id": case_id,
         "proposal_id": proposal.id,
         "triage_level": proposal.triage_level,
         "status": proposal.status,
-        "emergency": emergency
+        "emergency": result["emergency"],
+        "specialty": result["specialty"],
+        "nearby_care": result["nearby_care"],
+        "reasoning": result["reasoning"]
     }
