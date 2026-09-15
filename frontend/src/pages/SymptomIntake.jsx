@@ -14,7 +14,7 @@ export default function SymptomIntake() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-    useEffect(() => {
+  useEffect(() => {
     if (!navigator.geolocation) {
       Promise.resolve().then(() => setLocationStatus("unavailable"));
       return;
@@ -27,7 +27,7 @@ export default function SymptomIntake() {
       () => setLocationStatus("denied")
     );
   }, []);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -66,7 +66,7 @@ export default function SymptomIntake() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F6F7F6", display: "flex", flexDirection: "column", alignItems: "center", padding: "4rem 1.5rem" }}>
-      <div style={{ width: 620 }}>
+      <div style={{ width: 760 }}>
         <div style={{ marginBottom: 36 }}><Logo /></div>
         <p style={{ fontSize: 26, fontWeight: 500, color: "#14191F", margin: "0 0 8px" }}>What's going on?</p>
         <p style={{ fontSize: 14.5, color: "#4B535C", margin: "0 0 32px", lineHeight: 1.6 }}>
@@ -84,7 +84,7 @@ export default function SymptomIntake() {
             onChange={(e) => setSymptomsText(e.target.value)}
             placeholder="e.g. Sudden chest pain radiating to my left arm, sweating, hard to breathe"
             required
-            rows={7}
+            rows={9}
             style={{
               width: "100%", border: "1px solid #DFE3E6", borderRadius: 10, padding: 16,
               fontSize: 15, fontFamily: "inherit", resize: "vertical", boxSizing: "border-box",

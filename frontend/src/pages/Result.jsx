@@ -171,11 +171,16 @@ export default function Result() {
             </div>
           )}
 
-          {!isEmergency && (
-            <Button onClick={() => navigate("/profile-setup", { state: state })}>
-              Continue - complete my health profile
+          <div style={{ display: "flex", gap: 10 }}>
+            {!isEmergency && (
+              <Button onClick={() => navigate("/profile-setup", { state: state })}>
+                Continue - complete my health profile
+              </Button>
+            )}
+            <Button variant="secondary" onClick={() => navigate("/dashboard")}>
+              Go to dashboard
             </Button>
-          )}
+          </div>
         </div>
       </div>
     </div>
