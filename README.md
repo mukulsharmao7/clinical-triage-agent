@@ -51,5 +51,19 @@ autonomously on patient care — every action requires human sign-off.
 | 18 | 2026-09-12 | Frontend branding finalized as ArogyaAI — Login/Signup pages built with glowing medical-themed left panel (EKG animation, floating icons), reusable components (Button, Input, Logo, AuthVisual). Fixed CORS (FastAPI wasn't allowing frontend origin — browser was silently blocking successful 200 responses), full auth flow tested working end-to-end from actual browser UI. |
 | 19 | 2026-09-12 | Symptom-first flow built — automatic geolocation on page load (no button, critical for emergencies), spacious redesigned SymptomIntake page. Emergency page shows 108/112 tap-to-call + nearby hospitals. Added specialty-based care recommendation for non-emergency cases (SPECIALTY_MAP links each guideline to a specialist type, Overpass name-keyword search finds relevant nearby clinics/hospitals with graceful fallback to general hospitals when no specialty match found). Result page now shows AI reasoning, specialty recommendation, and relevant nearby care — tested end-to-end for both emergency and non-emergency cases. |
 | 20 | 2026-09-13 | Symptom intake page resized (wider, larger textarea) for better readability. Health profile setup page built — 2-step form (health background + optional insurance), progress indicator, "skip for now" option, wired to existing PatientProfile and InsurancePolicy backend endpoints. Full non-emergency flow now complete: symptoms → AI reasoning → specialty recommendation → profile setup → dashboard. Fixed Result page — "Go to dashboard" button now always visible (was previously missing for emergency cases, leaving users with no way forward). |
-| 21 | 2026-09-14 | Dashboard page built — profile, insurance (demo data, clearly labeled), hospitalization history, diet/lifestyle, and document vault all displayed with independent loading via Promise.allSettled (one missing section doesn't break the rest). Document upload wired directly from dashboard. Navbar component added (logout, new check-in). patientId now persisted to localStorage so dashboard works on direct navigation, not just post-flow. |
+| 21 | 2026-09-14 | Dashboard page — profile, insurance, hospitalization, diet, documents, resilient parallel loading (Promise.allSettled), document upload wired |
+| 22 | 2026-09-15 | Polish pass — spinner, auto-login after signup, responsive breakpoints, app-wide ErrorBoundary |
+| 23 | 2026-09-16 | Full browser-based integration testing across entire flow, mobile responsiveness verified |
+| 24 | 2026-09-17 | Deployed — PostgreSQL + FastAPI backend on Render, React frontend on Vercel, CORS and environment variables configured for production |
+| 25 | 2026-09-18 | Live deployment tested end-to-end, README finalized with live demo links and documented limitations, project complete |
 
+## 🚀 Live Demo
+- Frontend: https://YOUR-VERCEL-URL.vercel.app
+- Backend API docs: https://YOUR-RENDER-URL.onrender.com/docs
+
+**Note**: Backend is on Render's free tier and may take 30-50 seconds to wake up after inactivity.
+
+## ⚠️ Known Limitations (Portfolio/Demo Scope)
+- Insurance policies, claims, and hospital insurance-acceptance data are **synthetic** — no free public API exists for real insurance data.
+- Uploaded documents, images, audio, and the RAG vector store reset on backend redeploy (free-tier ephemeral filesystem).
+- This is a learning/portfolio project demonstrating agentic AI architecture and human-in-the-loop safety design — not a certified medical diagnostic tool.

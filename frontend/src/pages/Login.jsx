@@ -32,9 +32,9 @@ export default function Login() {
 
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "100vh" }}>
-      <AuthVisual />
+      <div className="hide-on-mobile"><AuthVisual /></div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-        <div style={{ width: 340 }}>
+        <div style={{ width: 340, maxWidth: "100%" }}>
           <div style={{ marginBottom: 32 }}><Logo /></div>
           <p style={{ fontSize: 20, fontWeight: 500, color: "#14191F", margin: "0 0 4px" }}>Sign in</p>
           <p style={{ fontSize: 13, color: "#4B535C", margin: "0 0 24px" }}>Access your secure health workspace.</p>

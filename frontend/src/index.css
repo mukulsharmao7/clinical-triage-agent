@@ -91,3 +91,14 @@ body {
   font-weight: 500;
   font-family: var(--font-mono);
 }
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
