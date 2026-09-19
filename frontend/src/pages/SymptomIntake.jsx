@@ -36,6 +36,7 @@ export default function SymptomIntake() {
     try {
       const patientRes = await api.post("/patients/", { name: "Self", age: null, gender: null });
       const patientId = patientRes.data.id;
+      localStorage.setItem("patientId", patientId);
 
       const caseRes = await api.post("/cases/", {
         patient_id: patientId,

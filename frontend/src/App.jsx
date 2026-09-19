@@ -6,6 +6,8 @@ import Signup from "./pages/Signup";
 import SymptomIntake from "./pages/SymptomIntake";
 import Result from "./pages/Result";
 import ProfileSetup from "./pages/ProfileSetup";
+import Dashboard from "./pages/Dashboard";
+
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -22,7 +24,7 @@ function App() {
           <Route path="/symptoms" element={<ProtectedRoute><SymptomIntake /></ProtectedRoute>} />
           <Route path="/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
           <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><div>Dashboard (Day 21)</div></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>
