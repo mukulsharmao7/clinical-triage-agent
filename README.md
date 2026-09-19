@@ -58,8 +58,8 @@ autonomously on patient care — every action requires human sign-off.
 | 25 | 2026-09-18 | Live deployment tested end-to-end, README finalized with live demo links and documented limitations, project complete |
 
 ## 🚀 Live Demo
-- Frontend: https://YOUR-VERCEL-URL.vercel.app
-- Backend API docs: https://YOUR-RENDER-URL.onrender.com/docs
+- Frontend: [https://clinical-triage-agent.vercel.app](https://clinical-triage-agent.vercel.app)
+- Backend API docs: https://clinical-triage-agent-v0dp.onrender.com/docs
 
 **Note**: Backend is on Render's free tier and may take 30-50 seconds to wake up after inactivity.
 
